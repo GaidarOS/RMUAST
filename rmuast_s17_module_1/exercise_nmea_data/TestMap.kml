@@ -44,8 +44,6 @@
 <description>Test coords</description>
 <styleUrl>#blue</styleUrl>
 <LineString>
-<altitudeMode>relativeToGround</altitudeMode>
-<coordinates>
 10.4314061648,55.3644562787,15.218
 10.4314061300,55.3644561973,15.196
 10.4314060643,55.3644561692,15.188
