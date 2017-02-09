@@ -65,9 +65,8 @@ utm_false_easting = 500000.0
 utm_scale_factor = 0.9996
 utm_origin_latitude = 0.0
 
+
 # *****************************************************************************
-
-
 class utmconv():
     def __init__(self):
         self.false_e = 500000.0
@@ -94,12 +93,12 @@ class utmconv():
         else:
             # calculate the zone based on the longitude
             zone = int((longitude + 180) / 6) + 1
-        # handle areas with special conventions (Denmark & South West Norway)
+            # handle areas with special conventions (Denmark & South West Norway)
             if (lat_deg_int > 55) and (lat_deg_int < 64) and (lon_deg_int > -1) and (lon_deg_int < 3):
                 zone = 31
             if (lat_deg_int > 55) and (lat_deg_int < 64) and (lon_deg_int > 2) and (lon_deg_int < 12):
                 zone = 32
-        # handle areas with special conventions (Svalbard)
+            # handle areas with special conventions (Svalbard)
             if lat_deg_int > 71:
                 if (lon_deg_int > -1) and (lon_deg_int < 9):
                     zone = 31
@@ -112,7 +111,8 @@ class utmconv():
 
         # calculate central meridian for this zone
         central_meridian = ((zone - 1) * 6 - 180 + 3) * self.deg_to_rad
-        # set false northing based on hemishpere
+
+        # set false northing based on hemisphere
         if latitude >= 0.0:
             false_northing = 0
             hemisphere = 'N'
@@ -163,16 +163,15 @@ class utmconv():
             else:
                 zlet = 'C'
 
-        # set parameters for WGS-84, UTM, the false northing and the zone central
-        # meridian
-        self.tm.set_params(wgs84_a, wgs84_f, utm_origin_latitude, central_meridian,
-                           utm_false_easting, false_northing, utm_scale_factor)
+        # set parameters for WGS-84, UTM, the false northing and the zone central meridian
+        self.tm.set_params(wgs84_a, wgs84_f, utm_origin_latitude, central_meridian, utm_false_easting, false_northing,
+                           utm_scale_factor)
 
         # perform conversion
         (easting, northing) = self.tm.geodetic_to_tranmerc(lat, lon)
 
         # return hemisphere, utm zone, utm letter, easting and northing
-        return (hemisphere, zone, zlet, easting, northing)
+        return hemisphere, zone, zlet, easting, northing
 
     def utm_to_geodetic(self, hemisphere, zone, easting, northing):
 
@@ -185,15 +184,14 @@ class utmconv():
         else:
             false_northing = 10000000
 
-        # set parameters for WGS-84, UTM, the false northing and the zone central
-        # meridian
-        self.tm.set_params(wgs84_a, wgs84_f, utm_origin_latitude, central_meridian,
-                           utm_false_easting, false_northing, utm_scale_factor)
+        # set parameters for WGS-84, UTM, the false northing and the zone central meridian
+        self.tm.set_params(wgs84_a, wgs84_f, utm_origin_latitude, central_meridian, utm_false_easting, false_northing,
+                           utm_scale_factor)
 
         # perform conversion
         (lat, lon) = self.tm.tranmerc_to_geodetic(easting, northing)
 
         # return geodetic latitude and longitude in degrees
-        return (lat * self.rad_to_deg, lon * self.rad_to_deg)
+        return lat * self.rad_to_deg, lon * self.rad_to_deg
 
 # *****************************************************************************

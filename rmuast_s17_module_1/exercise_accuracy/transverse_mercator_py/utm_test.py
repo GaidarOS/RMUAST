@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# *****************************************************************************
+#*****************************************************************************
 # UTM projection conversion test
 # Copyright (c) 2013-2016, Kjeld Jensen <kjeld@frobomind.org>
 # All rights reserved.
@@ -25,7 +25,7 @@
 # ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-# *****************************************************************************
+#*****************************************************************************
 """
 This file contains a simple Python script to test the UTM conversion class.
 
@@ -41,30 +41,30 @@ from math import pi, cos
 # define test position
 test_lat = 55.0000000000
 test_lon = 009.0000000000
-print('Test position [deg]:')
-print('  latitude:  %.10f' % (test_lat))
-print('  longitude: %.10f' % (test_lon))
+print 'Test position [deg]:'
+print '  latitude:  %.10f' % test_lat
+print '  longitude: %.10f' % test_lon
 
 # instantiate utmconv class
 uc = utmconv()
 
 # convert from geodetic to UTM
 (hemisphere, zone, letter, easting, northing) = uc.geodetic_to_utm(test_lat, test_lon)
-print('\nConverted from geodetic to UTM [m]')
-print('  %d %c %.5fe %.5fn' % (zone, letter, easting, northing))
+print '\nConverted from geodetic to UTM [m]'
+print '  %d %c %.5fe %.5fn' % (zone, letter, easting, northing)
 
 # convert back from UTM to geodetic
 (lat, lon) = uc.utm_to_geodetic(hemisphere, zone, easting, northing)
-print('\nConverted back from UTM to geodetic [deg]:')
-print('  latitude:  %.10f' % (lat))
-print('  longitude: %.10f' % (lon))
+print '\nConverted back from UTM to geodetic [deg]:'
+print '  latitude:  %.10f' % lat
+print '  longitude: %.10f' % lon
 
-# detrmine conversion position error [m]
-lat_err = abs(lat - test_lat)
-lon_err = abs(lon - test_lon)
+# determine conversion position error [m]
+lat_err = abs(lat-test_lat)
+lon_err = abs(lon-test_lon)
 earth_radius = 6378137.0  # [m]
-lat_pos_err = lat_err / 360.0 * 2 * pi * earth_radius
-lon_pos_err = lon_err / 360.0 * 2 * pi * (cos(lat) * earth_radius)
-print('\nPositional error from the two conversions [m]:')
-print('  latitude:  %.9f' % (lat_pos_err))
-print('  longitude: %.9f' % (lon_pos_err))
+lat_pos_err = lat_err/360.0 * 2*pi*earth_radius
+lon_pos_err = lon_err/360.0 * 2*pi*(cos(lat)*earth_radius)
+print '\nPositional error from the two conversions [m]:'
+print '  latitude:  %.9f' % lat_pos_err
+print '  longitude: %.9f' % lon_pos_err
