@@ -18,36 +18,39 @@ def convertLatLon(latitude, longitude):
     return converted_latitude, converted_longitude
 
 
-nmea_data = open('nmea_trimble_gnss_eduquad_flight.txt', 'r')
-
-line = nmea_data.readlines(1)
-items = line[1].split(',')
-# each item and its corresponding possition in the array
-time = items[1]
-latitude = items[2]
-latitudeDirection = items[3]
-longitude = items[4]
-longitudeDirection = items[5]
-satelitesTracked = items[7]
-horizontalDilution = items[8]
-altitude = items[9]
-heightGeoid = items[10]
-
-print(len(line))
-print(items, '\n')
-# basic output
-print("time:", time[:2] + ":" + time[2:4] + ":" + time[4:], "\nlatitude:", latitude, "\nlongitude:", longitude, "\naltitude:", altitude)
-converted_latitude, converted_longitude = convertLatLon(float(latitude), float(longitude))
-print(converted_latitude, converted_longitude)
-
 # Initiate class
 kml = kmlclass()
 # Create kml file to use with the gmaps api {begin(self, fname, name, desc, width)}
 kml.begin('TestMap', 'First map', 'Trial map for drones coords', 2)
 # Genarating section begining {trksegbegin(self, segname, segdesc, color, altitude)}
 kml.trksegbegin('Blue Line', 'Test coords', 'blue', 'relative')
-# Generating coordinate pairs {trkpt(self, lat, lon, ele)}
-kml.trkpt(converted_latitude, converted_longitude, float(altitude))
+
+# read file without the newline characters
+line = [line.rstrip('\n') for line in open('nmea_trimble_gnss_eduquad_flight.txt', 'r')]
+
+for item in line:
+    if item != "" and item != "---":
+        item = item.split(',')
+
+        # each item and its corresponding possition in the array
+        time = item[1]
+        latitude = item[2]
+        latitudeDirection = item[3]
+        longitude = item[4]
+        longitudeDirection = item[5]
+        satelitesTracked = item[7]
+        horizontalDilution = item[8]
+        altitude = item[9]
+        heightGeoid = item[10]
+        converted_latitude, converted_longitude = convertLatLon(float(latitude), float(longitude))
+        # Generating coordinate pairs {trkpt(self, lat, lon, ele)}
+        kml.trkpt(converted_latitude, converted_longitude, float(altitude))
+
+# basic output
+print('Last Item:\n')
+print("time:", time[:2] + ":" + time[2:4] + ":" + time[4:], "\nlatitude:", latitude, "\nlongitude:", longitude, "\naltitude:", altitude)
+print("UMT Latitude:", converted_latitude, ", UMT Longitude:", converted_longitude)
+
 # End coordinate section {no args}
 kml.trksegend()
 # End and close file {no arguments}
