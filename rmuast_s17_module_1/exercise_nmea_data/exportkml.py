@@ -102,7 +102,7 @@ class kmlclass:
         return
 
     def trkpt(self, lat, lon, ele):
-        self.f.write('%013.10f,%013.10f,%.3f\n' % (lon, lat, ele))
+        self.f.write('%013.10f,%013.10f,%.3f\n' % (lat, lon, ele))
         return
 
     def end(self):
