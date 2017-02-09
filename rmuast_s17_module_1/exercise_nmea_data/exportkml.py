@@ -38,7 +38,7 @@ class kmlclass:
         return
 
     def begin(self, fname, name, desc, width):
-        self.f = open(fname, 'w')
+        self.f = open("{}.kml".format(fname), 'w')
         self.f.write('<?xml version="1.0" encoding="UTF-8"?>\n')
         self.f.write('<kml xmlns="http://earth.google.com/kml/2.1">\n')
         self.f.write('<Document>\n')
@@ -92,7 +92,7 @@ class kmlclass:
             self.f.write('<altitudeMode>absolute</altitudeMode>\n')
         elif altitude == 'relativeToGround':
             self.f.write('<altitudeMode>relativeToGround</altitudeMode>\n')
-            self.f.write('<coordinates>\n')
+        self.f.write('<coordinates>\n')
         return
 
     def trksegend(self):
@@ -102,7 +102,7 @@ class kmlclass:
         return
 
     def trkpt(self, lat, lon, ele):
-        self.f.write('%013.10f,%013.10f,%.3f\n' % (lat, lon, ele))
+        self.f.write('%013.10f,%013.10f,%.3f\n' % (lon, lat, ele))
         return
 
     def end(self):

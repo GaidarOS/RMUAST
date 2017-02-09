@@ -23,7 +23,7 @@ kml = kmlclass()
 # Create kml file to use with the gmaps api {begin(self, fname, name, desc, width)}
 kml.begin('TestMap', 'First map', 'Trial map for drones coords', 2)
 # Genarating section begining {trksegbegin(self, segname, segdesc, color, altitude)}
-kml.trksegbegin('Blue Line', 'Test coords', 'blue', 'relative')
+kml.trksegbegin('Blue Line', 'Test coords', 'blue', 'relativeToGround')
 
 # read file without the newline characters
 line = [line.rstrip('\n') for line in open('nmea_trimble_gnss_eduquad_flight.txt', 'r')]
@@ -48,7 +48,7 @@ for item in line:
 
 # basic output
 print('Last Item:\n')
-print("time:", time[:2] + ":" + time[2:4] + ":" + time[4:], "\nlatitude:", latitude, "\nlongitude:", longitude, "\naltitude:", altitude)
+print("time:", time[:2] + ":" + time[2:4] + ":" + time[4:], "\nlatitude:", latitude, "\nlongitude:", longitude, "\naltitude:", altitude, horizontalDilution)
 print("UMT Latitude:", converted_latitude, ", UMT Longitude:", converted_longitude)
 
 # End coordinate section {no args}
