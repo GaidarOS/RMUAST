@@ -47,8 +47,7 @@ for item in line:
         kml.trkpt(converted_latitude, converted_longitude, float(altitude))
 
 # basic output
-print('Last Item:\n')
-print("time:", time[:2] + ":" + time[2:4] + ":" + time[4:], "\nlatitude:", latitude, "\nlongitude:", longitude, "\naltitude:", altitude, horizontalDilution)
+print("time:", time[:2] + ":" + time[2:4] + ":" + time[4:], "\nlatitude:", latitude, "\nlongitude:", longitude, "\naltitude:", altitude, "\nHDOP:", horizontalDilution)
 print("UMT Latitude:", converted_latitude, ", UMT Longitude:", converted_longitude)
 
 # End coordinate section {no args}
