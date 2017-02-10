@@ -40,7 +40,7 @@ from math import pi, cos
 
 # define test position
 test_lat = 55.0000000000
-test_lon = 009.0000000000
+test_lon = 09.0000000000
 print 'Test position [deg]:'
 print '  latitude:  %.10f' % test_lat
 print '  longitude: %.10f' % test_lon
