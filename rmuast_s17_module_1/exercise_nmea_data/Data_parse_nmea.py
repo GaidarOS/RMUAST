@@ -1,7 +1,5 @@
 # __authors__= ""
-from __future__ import print_function #support for Pyhon 2.7 - comment out if you use python>2.7.
 from exportkml import kmlclass
-
 
 
 def convertLatLon(latitude, longitude):
@@ -28,28 +26,25 @@ kml.begin('TestMap', 'First map', 'Trial map for drones coords', 2)
 kml.trksegbegin('Blue Line', 'Test coords', 'blue', 'relativeToGround')
 
 # read file without the newline characters
-#line = [line.rstrip('\n') for line in open('nmea_trimble_gnss_eduquad_flight.txt', 'r')]
-line = [line.rstrip('\n') for line in open('nmea_ublox_neo_24h_static.txt', 'r')]
+line = [line.rstrip('\n') for line in open('nmea_trimble_gnss_eduquad_flight.txt', 'r')]
 
 for item in line:
-    if item != "" and item != "---" and "$GPGGA"in item:
+    if item != "" and item != "---":
         item = item.split(',')
-        if item[0]=="$GPGGA" and item>=13:
-            # each item and its corresponding possition in the array
-            identifier=item[0]
-            print("id = ", identifier)
-            time = item[1]
-            latitude = item[2]
-            latitudeDirection = item[3]
-            longitude = item[4]
-            longitudeDirection = item[5]
-            satelitesTracked = item[7]
-            horizontalDilution = item[8]
-            altitude = item[9]
-            heightGeoid = item[10]
-            converted_latitude, converted_longitude = convertLatLon(float(latitude), float(longitude))
-            # Generating coordinate pairs {trkpt(self, lat, lon, ele)}
-            kml.trkpt(converted_latitude, converted_longitude, float(altitude))
+
+        # each item and its corresponding possition in the array
+        time = item[1]
+        latitude = item[2]
+        latitudeDirection = item[3]
+        longitude = item[4]
+        longitudeDirection = item[5]
+        satelitesTracked = item[7]
+        horizontalDilution = item[8]
+        altitude = item[9]
+        heightGeoid = item[10]
+        converted_latitude, converted_longitude = convertLatLon(float(latitude), float(longitude))
+        # Generating coordinate pairs {trkpt(self, lat, lon, ele)}
+        kml.trkpt(converted_latitude, converted_longitude, float(altitude))
 
 # basic output
 print("time:", time[:2] + ":" + time[2:4] + ":" + time[4:], "\nlatitude:", latitude, "\nlongitude:", longitude, "\naltitude:", altitude, "\nHDOP:", horizontalDilution)
