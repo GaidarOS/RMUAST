@@ -1,0 +1,144 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Journal Article
+% LaTeX Template
+% Version 1.3 (9/9/13)
+%
+% This template has been downloaded from:
+% http://www.LaTeXTemplates.com
+%
+% Original author:
+% Frits Wenneker (http://www.howtotex.com)
+%
+% License:
+% CC BY-NC-SA 3.0 (http://creativecommons.org/licenses/by-nc-sa/3.0/)
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%----------------------------------------------------------------------------------------
+%       PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+\documentclass[paper=letter, fontsize=10pt]{article}
+\usepackage[english]{babel} % English language/hyphenation
+\usepackage{amsmath,amsfonts,amsthm} % Math packages
+\usepackage[utf8]{inputenc}
+\usepackage{blindtext, subcaption, caption, graphicx, float, hyperref}
+% float: Required for tables and figures in the multi-column environment - they need to be placed in specific locations with the [H] (e.g. \begin{table}[H])
+% Hyperref: For hyperlinks in the PDF
+\usepackage[sc]{mathpazo} % Use the Palatino font
+\usepackage[T1]{fontenc} % Use 8-bit encoding that has 256 glyphs
+\linespread{1.05} % Line spacing - Palatino needs more space between lines
+\usepackage{microtype} % Slightly tweak font spacing for aesthetics
+\usepackage[hmarginratio=1:1,top=32mm,columnsep=20pt]{geometry} % Document margins
+\usepackage{multicol} % Used for the two-column layout of the document
+%\usepackage[hang, small,labelfont=bf,up,textfont=it,up]{caption} % Custom captions under/above floats in tables or figures
+\usepackage{booktabs} % Horizontal rules in tables
+\usepackage{lettrine} % The lettrine is the first enlarged letter at the beginning of the text
+\usepackage{paralist} % Used for the compactitem environment which makes bullet points with less space between them
+\usepackage{abstract} % Allows abstract customization
+\renewcommand{\abstractnamefont}{\normalfont\bfseries} % Set the "Abstract" text to bold
+\renewcommand{\abstracttextfont}{\normalfont\small\itshape} % Set the abstract itself to small italic text
+\usepackage{titlesec} % Allows customization of titles
+
+\renewcommand\thesection{\Roman{section}} % Roman numerals for the sections
+\renewcommand\thesubsection{\Roman{subsection}} % Roman numerals for subsections
+
+\titleformat{\section}[block]{\large\scshape\centering}{\thesection.}{1em}{} % Change the look of the section titles
+\titleformat{\subsection}[block]{\large}{\thesubsection.}{1em}{} % Change the look of the section titles
+\newcommand{\horrule}[1]{\rule{\linewidth}{#1}} % Create horizontal rule command with 1 argument of height
+\usepackage{fancyhdr} % Headers and footers
+\pagestyle{fancy} % All pages have headers and footers
+\fancyhead{} % Blank out the default header
+\fancyfoot{} % Blank out the default footer
+
+\fancyhead[C]{University of Southern Denmark $\bullet$ RM-UAST $\bullet$ Spring 2017 $\bullet$ Group 5 } % Custom header text
+
+\fancyfoot[RO,LE]{\thepage} % Custom footer text
+%----------------------------------------------------------------------------------------
+%       TITLE SECTION
+%----------------------------------------------------------------------------------------
+\title{\vspace{-15mm}\fontsize{24pt}{10pt}\selectfont\textbf{Module One }} % Article title
+\author{
+\large
+{\textsc{}}\\[2mm]
+{\textsc{Henrik Frank, hefra13@student.sdu.dk }}\\[2mm]
+{\textsc{Christian Arentsen, chare13@student.sdu.dk }}\\[2mm]
+{\textsc{Vasileios Karvouniaris, vakar15@student.sdu.dk }}\\[2mm]
+{\textsc{Asbjørn Schou Müller, asmul10@student.sdu.dk }}\\[20mm]
+%\thanks{A thank you or further information}\\ % Your name
+%\normalsize \href{mailto:marco.torres.810@gmail.com}{marco.torres.810@gmail.com}\\[2mm] % Your email address
+}
+\date{}
+
+%----------------------------------------------------------------------------------------
+\begin{document}
+\maketitle % Insert title
+\thispagestyle{fancy} % All pages have headers and footers
+
+
+\section{Exercises}
+\subsection{Global navigation satellite systems}
+\emph{The Global Positioning System (GPS) \url{http://www.gps.gov} is the best known implementation of a Global Navigation Satellite System (GNSS). Please name the other GNSS operational today. Please briefly describe differences if any.}
+\begin{itemize}
+\item[GLONASS:] Russian GNSS, tends to fail more quickly than GPS, hence full constellation of GLONASS satellites has rarely been seen.  
+\item[Galileo:] EU GNSS, compatible with GPS.
+\item[BeiDou:] Chinese GNSS, "compass" in English, no official information released about this, but based on a little information $\rightarrow$ compatible with GPS.
+\item[QZSS:] Japanese system, consisting of three satellites in geosynchronous (not geostationary) orbit, thus in inclined elliptical orbits, appearing to almost "hang" above Japanese islands for more than half of each orbit. Arguably not GNSS then.
+\end{itemize}
+
+
+\subsection{GPS architecture}
+\emph{Please describe using three short paragraphs the GPS Space segment, Control segment and User segment}
+\begin{itemize}
+\item The space segment is one of the three components of an artificial satellite system. It consists of a constellation of satellites that transmit radio signals to users.It it mainly maintained by the US, who is committed to maintain 24 operational satellites, at least 95\% of the time.The satellites are place in a Medium Earth Orbit and circle the earth twice a day.(\cite{navipedia},\cite{gps_gov})
+
+\item The GPS Control Segment is composed by a network of Master Control Station(MCS), Backup Master Control Station(BMCS), a network of four Ground Antennas(GAs) and a network of globally distributed Monitor Stations(MSs). MSs are distributed around the world and equipped with atomic clocks standards and GPS receivers to continuously collect GPS data for all the satellites in view from their locations and then transmit that data to MCS. The MCS processes the measurements received by the MS to estimate satellite orbits (ephemerides) and clock errors, among other parameters, and to generate the navigation message. The Ground Antennas uplink data to the satellites via S-band radio signals. These data includes ephemerides and clock correction information transmitted within the Navigation Message, as well as command telemetry from the MCS. This information can be uploaded to each satellite three times per day but it is usually updated just once a day.(\cite{navipedia},\cite{gps_gov})
+\item The GPS User segment consists on L-band radio receiver/processors and antennas which receive GPS signals, determine pseudoranges (and other observables), and solve the navigation equations in order to obtain their coordinates and provide an accurate time. It's applications cover multiple areas such as agriculture, surveying and mapping as well as aviation, road and nautical. GPS is vital to the Next Generation Air Transportation System (NextGen) that will enhance flight safety while increasing airspace capacity. GPS is also vital to US military operations since almost all military assets are equipped with GPS receivers.(\cite{navipedia},\cite{gps_gov})
+\end{itemize}
+
+\subsection{GNSS error sources}
+\emph{Please describe using short paragraphs the most dominant error sources of a GNSS. What are the
+expected contributions in meter?}
+
+\begin{itemize}
+\item The actual position of the GNSS satellite is only known to within a meter or two
+\item The timing of its clock may be off by a few nanoseconds
+\item As the radio signal from the satellite is transmitted through the ionosphere and troposphere, the signal can be delayed because of temperature change
+\item The signal can be fooled by signal reflections from nearby objects, known as multipath (\cite{GNSS_Cobb}, page 6)
+\end{itemize}
+
+Without considering RTK systems, the accuracy of the civil navigation signals is nine meters horizontal and 15 meters vertical. A RTK system is able to provide real-time GNSS positions with an accuracy of one to two centimetres.
+
+\subsection{Dilution of precision (DOP)}
+\emph{What are GDOP, PDOP, HDOP and VDOP?}
+
+GDOP: Geometric dilution of precision, describing the accuracy degradation of the position solution due solely to the relative positions of the satellites. Comes from the square root of the trace of the position covariance matrix (\cite{GNSS_Cobb}, page 6).
+Components of GDOP describes the degradation in particular dimensions: horizontal DOP (HDOP), vertical DOP (VDOP), position DOP (PDOP) and time DOP (TDOP). 
+Note: GDOP assumes that the errors in the individual pseudorange measurements are uncorrelated and have same statistics.
+
+\subsection{GNSS accuracy}
+\emph{Please describe using short paragraphs the following types of positioning and the expected accuracy
+hereof (remember to include references):}
+\begin{enumerate}
+\item Standard Positioning Service (SPS) - "The SPS is a positioning and timing service provided by the way of ranging signals broadcast at the GPS L1 frequency. The L1 frequency, transmitted by all satellites contains a coarse/acquisition (C/A) code ranging signal, with a navigation data message, that is available for peaceful civil, commercial and scientific use." (\cite{SPS_Standard}, page 3)
+\item Differential GPS (DGPS) - DGPS systems consists of a reference receiver, in order to correct the pseudorange signal, received by the GPS receiver. The reference receiver, installed at a well-known location computes an assumed pseudorange for each satellite signal it detects. It then measures the pseudorange for that satellite signal and subtracts the assumed pseudorange, forming a differential correction (\cite{GNSS_Cobb}, page 7).
+\item Real Time Kinematics (RTK) Float - In float it doesn't know how many wavelengths between the satellite and the receiver there is 
+\item Real Time Kinematics (RTK) Fixed - In fixed it knows how many wavelengths there are between the satellite and receiver. Also the reference station has to be within 10km on L1 frequency band, and within 40km when using frequency band above L1.
+\end{enumerate}
+
+\subsection{RTK-GNSS}
+\emph{What does integer ambiguity mean?}
+Integer ambiguity is the term for the inherent ambiguity of the carrier signal. The carrier signal phases are 19 cm long and have no distinction from one another, such as the 300 m long PNR signal wavelengths do. The receiver will always be at a distance of an integer number of wavelengths + a fraction of a wavelength from the satellite. A good receiver can identify this fraction of the wavelength down to a fraction of 1\%, which resolves to an accuracy of 0.5 meter for the PNR signal and 1 mm for the carrier phase. It also counts an arbitrary number of phases and together with the fractional wavelength it is called the relative carrier phase. The problem is that the receiver does not know the number of whole wavelengths to the satellite, which would otherwise give a very precise pseudo range, and even if it is estimated with a high confidence, it still might be of by 1 or 2 or any integer number of wavelengths.  
+
+\section{Coordinate System}
+\subsection{UTM Accuracy}
+This was solved by starting with coordinates located at SDU, which we converted into UTM, and added 1000 to the value of northing. We calculated the distance between the previous UTM coordinate and the new one, which of course was 1 km, and then converted the new UTM value back to longitude latitude. From this new point, the distance was calculated to 0.89, as well as the error rates, showing UTM is much more precise. 
+
+\subsection{NMEA Data}
+The exercise was solved by parsing the nmea data from "nmea\_trimble\_gnss\_eduquad\_flight.txt" and keeping the latitude and longitude data. The process is done by Data\_parse.py. First the .txt was read line-by-line and then each useful data from the string was processed. Latitude and longitude we converted from the Degrees and Decimal Minutes format to a Decimal Degrees format, which was then stored in a .kml file for Google Maps API to read. The final map of the drone track can be seen by opening "Google\_maps.html" or by loading "TrackMap.kml" in Google Earth. The visualizations of the altitude above mean sea level and the number of tracked satellites can be seen in the images "AltitudeVisualization.png" and "TrackedSatellitesVisualization.png" respectively. As for the horizontal dilution, it was decided to use the GGA data from "nmea\_ublox\_neo\_24h\_static.txt", which after processing produced the "HDOP.png".(\cite{git})
+
+
+
+\bibliographystyle{plain}
+\bibliography{bibfile}
+%----------------------------------------------------------------------------------------
+%\end{multicols}
+\end{document}
