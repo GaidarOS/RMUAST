@@ -1,5 +1,8 @@
-# __authors__= ""
+#!/usr/bin/python3.5
+# __authors__= ""\
+from __future__ import print_function  # support for Pyhon 2.7 - comment out if you use python>2.7.
 from exportkml import kmlclass
+from matplotlib import pyplot as plt
 
 
 def convertLatLon(latitude, longitude):
@@ -11,19 +14,23 @@ def convertLatLon(latitude, longitude):
     lat_mm_mmmm = latitude % 100
     lng_mm_mmmmm = longitude % 100
 
-    # Convert to UTM format
+    # Convert to Decimal Degrees format
     converted_latitude = lat_degree + (lat_mm_mmmm / 60)
     converted_longitude = lng_degree + (lng_mm_mmmmm / 60)
 
     return converted_latitude, converted_longitude
 
 
+# Initiate arrays
+altitudeList = []
+satelliteList = []
+timeList = []
 # Initiate class
 kml = kmlclass()
 # Create kml file to use with the gmaps api {begin(self, fname, name, desc, width)}
-kml.begin('TestMap', 'First map', 'Trial map for drones coords', 2)
+kml.begin('TrackMap', 'Track map', 'Track map for drone\'s coordinates', 2)
 # Genarating section begining {trksegbegin(self, segname, segdesc, color, altitude)}
-kml.trksegbegin('Blue Line', 'Test coords', 'blue', 'relativeToGround')
+kml.trksegbegin('Blue Line', 'Track coords', 'blue', 'relativeToGround')
 
 # read file without the newline characters
 line = [line.rstrip('\n') for line in open('nmea_trimble_gnss_eduquad_flight.txt', 'r')]
@@ -38,19 +45,32 @@ for item in line:
         latitudeDirection = item[3]
         longitude = item[4]
         longitudeDirection = item[5]
-        satelitesTracked = item[7]
+        satellitesTracked = item[7]
         horizontalDilution = item[8]
         altitude = item[9]
         heightGeoid = item[10]
         converted_latitude, converted_longitude = convertLatLon(float(latitude), float(longitude))
+        altitudeList.append(float(altitude))
+        satelliteList.append(float(satellitesTracked))
+        timeList.append(float(time) / 10000)
         # Generating coordinate pairs {trkpt(self, lat, lon, ele)}
         kml.trkpt(converted_latitude, converted_longitude, float(altitude))
-
-# basic output
-print("time:", time[:2] + ":" + time[2:4] + ":" + time[4:], "\nlatitude:", latitude, "\nlongitude:", longitude, "\naltitude:", altitude, "\nHDOP:", horizontalDilution)
-print("UMT Latitude:", converted_latitude, ", UMT Longitude:", converted_longitude)
 
 # End coordinate section {no args}
 kml.trksegend()
 # End and close file {no arguments}
 kml.end()
+
+# Plot to visualize the altitude change in respect to time
+plt.plot(timeList, altitudeList)
+plt.title('Altitude above Mean Sea Level')
+plt.ylabel('Altitude in meters')
+plt.xlabel('Timestamp')
+plt.show()
+
+# Plot to visualize the tracked satellites every time
+plt.plot(timeList, satelliteList)
+plt.title('Number of satellites tracked')
+plt.ylabel('Satellites tracked')
+plt.xlabel('Timestamp')
+plt.show()
