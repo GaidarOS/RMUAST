@@ -163,6 +163,14 @@ For example: a hexa copter with a maximum continuous current draw of 20 amps pr.
 where nominal voltage usually is around 3.7 volts for each cell.
 
 \paragraph{Show on a graph the correlation (if existing) between Nominal Capacity and Specific Energy. Use min. 25 of Melastas \textit{High Drain Type Prismatic Li-polymer Battery} cells with various c-rate and capacities as test data. \url{http://www.melasta.com/product2.asp}}
+\begin{figure}
+\centering
+\includegraphics[scale=0.6]{Figures/nomcapacity}
+\caption{Correlation of normal capacity and specific energy}
+\label{fig_capacity}
+\end{figure}
+
+As seen in figure~\ref{fig_capacity}, there is a correlation between nominal capacity and specific energy. As the capacity rise, the weight of the battery rises to, which means the ratio between capacity and specific energy remains the same. There are some deviations, these batteries must be considered "inefficient" as they don't provide enough capacity, compared to their weight. A battery with smaller/more capacity and lower/heigher weight will be a more optimal choice.
 
 \paragraph{Assuming the drone from exercise 1 is using 50 W pr. motor on average during a flight and we want to keep the drone flying for 30 min on a full charge. Calculate the minimum capacity and c-rate of the battery.}
 In exercise 1 we calculated by assuming each motor would consume 100 W pr. motor on a quadcopter, which lead to a maximum continuous current draw of 43.35amp. In this exercise we assume each motor to consume 50 W which is exactly half. In this case our maximum continuous current draw is 43.35/2 = 21.675amp. We want the drone to fly 30 minutes. In this case we need a battery with a minimum capacity of 10.8375aH. We use the equation for minimum c-rate.
