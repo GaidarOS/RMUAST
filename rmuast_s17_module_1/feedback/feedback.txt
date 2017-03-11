@@ -1,0 +1,28 @@
+
+Hi grp5,
+
+Here is some feedback on your report:
+
+Glonass: Your answer is not consistent with today's use. Almost any GNSS receiver today (from running watches to survey grade equipment) use Glonass satellites to supplement the GPS satellites yielding higher accuracy and more reliability.
+
+Galileo, except the SPS service is not yet operable.
+
+GPS architecture
+Your references are not properly included in your report text, only ? is shown.
+
+
+GNSS error sources
+SPS accuracy: 15m is the 95th percentile of the "text book" answer (which is fine). FYI to get more information you would have to look into the performance standard: table page 21: http://www.gps.gov/technical/ps/2008-SPS-performance-standard.pdf
+
+V GNSS Accuracy
+You are missing the expected accuracies for DGPS and RTK float.
+
+I UTM Accuracy
+Your calculations must be wrong, I assume you mean that the difference is 0.11 km?
+
+Also your conclusion is wrong, it is not UTM that is accuracte. UTM is a flat projection onto a geoid, whereas Great Circle Distance approximates the shape of the Earth much more accurate.
+
+NMEA Data
+Nice Altitude view images. Please include images in the report next time.
+
+/Kjeld
