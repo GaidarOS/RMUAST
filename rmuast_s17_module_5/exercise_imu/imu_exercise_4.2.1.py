@@ -2,9 +2,8 @@
 # -*- coding: utf-8 -*-
 
 # import libraries
-from math import pi, sqrt, atan2
+from math import pi
 import matplotlib.pyplot as plt
-from scipy.signal import butter, lfilter
 
 
 # IMU exercise
@@ -12,15 +11,9 @@ from scipy.signal import butter, lfilter
 
 # Insert initialize code below ###################
 
-# Uncomment the file to read ##
-# fileName = 'nmea_data.txt'
-# fileName = 'imu_razor_data_static.txt'
-# fileName = 'imu_razor_data_yaw_90deg.txt'
-fileName = 'imu_razor_data_pitch_45deg.txt'
-# fileName = 'imu_razor_data_roll_45deg.txt'
-
+fileName = 'imu_razor_data_yaw_90deg.txt'
 # IMU type
-# imuType = 'vectornav_vn100'
+
 imuType = 'sparkfun_razor'
 
 # Variables for plotting ##
@@ -29,20 +22,6 @@ plotData = []
 
 # Initialize your variables here ##
 myValue = 0.0
-
-
-def butter_lowpass(cutoff, fs, order=5):
-    nyq = 0.5 * fs
-    normal_cutoff = cutoff / nyq
-    b, a = butter(order, normal_cutoff, btype='low', analog=False)
-    return b, a
-
-
-def butter_lowpass_filter(data, cutoff, fs, order=5):
-    b, a = butter_lowpass(cutoff, fs, order=order)
-    y = lfilter(b, a, data)
-    return y
-
 ######################################################
 
 
@@ -90,43 +69,33 @@ for line in f:
 
     # Variables available
     # ----------------------------------------------------
-    # count     Current number of updates
-    # ts_prev   Time stamp at the previous update
-    # ts_now    Time stamp at this update
-    # acc_x     Acceleration measured along the x axis
-    # acc_y     Acceleration measured along the y axis
-    # acc_z     Acceleration measured along the z axis
-    # gyro_x    Angular velocity measured about the x axis
-    # gyro_y    Angular velocity measured about the y axis
-    # gyro_z    Angular velocity measured about the z axis
+    # count		Current number of updates
+    # ts_prev	Time stamp at the previous update
+    # ts_now	Time stamp at this update
+    # acc_x		Acceleration measured along the x axis
+    # acc_y		Acceleration measured along the y axis
+    # acc_z		Acceleration measured along the z axis
+    # gyro_x	Angular velocity measured about the x axis
+    # gyro_y	Angular velocity measured about the y axis
+    # gyro_z	Angular velocity measured about the z axis
 
     #  Insert your code here ##
-    # 4.1.1
-    # myValue = atan2(acc_y, sqrt(acc_x**2 + acc_z**2))
-    # 4.1.2
-    # myValue = atan2(-acc_x, acc_z)
-    # 4.1.3
-    # myValue = atan2(acc_y, sqrt(acc_x**2 + acc_z**2))
-    # myValue = atan2(-acc_x, acc_z)
-    myValue = atan2(acc_y, sqrt(acc_x**2 + acc_z**2))
-    fs = 101.5
-    cutoff = 5
+
+    myValue += gyro_z * (ts_now - ts_prev)
+
     # in order to show a plot use this function to append your value to a list:
     plotData.append(myValue * 180.0 / pi)
-    ######################################################
+
+######################################################
 
 # closing the file
 f.close()
-myValue = butter_lowpass_filter(plotData, cutoff, fs, 5)
-myValue1 = butter_lowpass_filter(plotData, cutoff, fs, 5)
 
-# show the plot
 if showPlot:
-    plt.title("LPF on Pitch angle")
-    plt.ylabel("Angle")
+    # show the plot
+    plt.title("Gyro z axis static")
+    plt.ylabel("Gyro turn degree")
     plt.xlabel("Time")
-    plt.plot(plotData, label="order5", color="g")
-    plt.plot(myValue1, label="order2", color="r")
-    plt.legend(loc="best")
-    plt.savefig('imu_exercise_plot.png')
+    plt.plot(plotData)
+    plt.savefig('imu_exercise_4.2.1_plot.png')
     plt.show()

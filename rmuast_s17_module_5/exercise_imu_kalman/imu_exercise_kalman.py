@@ -5,16 +5,18 @@
 # Copyright (c) 2015-2017 Kjeld Jensen kjen@mmmi.sdu.dk kj@kjen.dk
 
 # import libraries
+from __future__ import print_function
 from math import pi, sqrt, atan2
 import matplotlib.pyplot as plt
 from pylab import ion
 from imu_box3d import imu_visualize
+from builtins import input
 
 # name of the file to read ##
 fileName = 'imu_razor_data_pitch_45deg.txt'
 
 # IMU type
-#imuType = 'vectornav_vn100'
+# imuType = 'vectornav_vn100'
 imuType = 'sparkfun_razor'
 
 # other parameters
@@ -22,7 +24,7 @@ showPlot = True
 show3DLiveView = True
 show3DLiveViewInterval = 3
 
-##### Insert initialize code below ###################
+# Insert initialize code below ###################
 
 # approx. bias values determined by averaging over static measurements
 bias_gyro_x = 0.0  # [rad/measurement]
@@ -30,24 +32,24 @@ bias_gyro_y = 0.0  # [rad/measurement]
 bias_gyro_z = 0.0  # [rad/measurement]
 
 # variances
-gyroVar =
-pitchVar =
+gyroVar = 0.008
+pitchVar = 0.008
 
 # Kalman filter start guess
 estAngle = -pi / 4.0
-estVar =
+estVar = 0.5
 
 # Kalman filter housekeeping variables
-gyroVarAcc =
+gyroVarAcc = 0.5
 
 ######################################################
 
-## Variables for plotting ##
+# Variables for plotting ##
 plotDataGyro = []
 plotDataAcc = []
 plotDataKalman = []
 
-## Initialize your variables here ##
+# Initialize your variables here ##
 gyro_x_rel = 0.0
 gyro_y_rel = 0.0
 gyro_z_rel = 0.0
@@ -59,7 +61,7 @@ f = open(fileName, "r")
 count = 0
 
 # initialize 3D liveview
-if show3DLiveView == True:
+if show3DLiveView:
     imuview = imu_visualize()
     imuview.set_axis(0, 0, 0)
     imuview.update()
@@ -104,7 +106,7 @@ for line in f:
     gyro_y -= bias_gyro_y
     gyro_z -= bias_gyro_z
 
-    ##### Insert loop code below #########################
+    # Insert loop code below #########################
 
     # Variables available
     # ----------------------------------------------------
@@ -118,23 +120,23 @@ for line in f:
     # gyro_y	Angular velocity measured about the y axis
     # gyro_z	Angular velocity measured about the z axis
 
-    ## Insert your code here ##
+    # Insert your code here ##
 
     # calculate pitch (x-axis) and roll (y-axis) angles
-    pitch =
-    roll =
+    pitch = atan2(acc_y, sqrt(acc_x**2 + acc_z**2))
+    roll = atan2(-acc_x, acc_z)
 
     # integrate gyro velocities to releative angles
-    gyro_x_rel +=
-    gyro_y_rel +=
-    gyro_z_rel +=
+    gyro_x_rel += gyro_x * (ts_now - ts_prev)
+    gyro_y_rel += gyro_y * (ts_now - ts_prev)
+    gyro_z_rel += gyro_z * (ts_now - ts_prev)
 
     # Kalman prediction step (we have new data in each iteration)
 
     # Kalman correction step (we have new data in each iteration)
 
     # define which value to plot as the Kalman filter estimate
-    kalman_estimate =
+    kalman_estimate = gyro_x_rel
 
     # define which value to plot as the absolute value (pitch/roll)
     pitch_roll_plot = pitch
@@ -145,7 +147,7 @@ for line in f:
     ######################################################
 
     # if 3D liveview is enabled
-    if show3DLiveView == True and count % show3DLiveViewInterval == 0:
+    if show3DLiveView and count % show3DLiveViewInterval == 0:
 
         # determine what variables to liveview
         roll_view = 0.0
@@ -156,7 +158,7 @@ for line in f:
         imuview.update()
 
     # if plotting is enabled
-    if showPlot == True:
+    if showPlot:
         plotDataGyro.append(gyro_rel_plot * 180.0 / pi)
         plotDataAcc.append(pitch_roll_plot * 180.0 / pi)
         plotDataKalman.append(kalman_estimate * 180.0 / pi)
@@ -165,7 +167,7 @@ for line in f:
 f.close()
 
 # show the plot
-if showPlot == True:
+if showPlot:
     ion()
     plt.figure(1)
     plt.title('Gyro integrated (relative) angle')
@@ -178,5 +180,5 @@ if showPlot == True:
     plt.plot(plotDataKalman, 'red')
     plt.savefig('imu_exercise_acc_kalman.png')
     plt.draw()
-    print 'Press enter to quit'
-    raw_input()
+    print('Press enter to quit')
+    input()

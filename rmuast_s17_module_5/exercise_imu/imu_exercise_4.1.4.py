@@ -4,7 +4,7 @@
 # import libraries
 from math import pi, sqrt, atan2
 import matplotlib.pyplot as plt
-from scipy.signal import butter, lfilter
+from scipy.signal import butter, lfilter, freqz
 
 
 # IMU exercise
@@ -117,16 +117,16 @@ for line in f:
 
 # closing the file
 f.close()
-myValue = butter_lowpass_filter(plotData, cutoff, fs, 5)
-myValue1 = butter_lowpass_filter(plotData, cutoff, fs, 5)
+myValue = butter_lowpass_filter(plotData, cutoff, fs, 3)
+LPF = butter_lowpass_filter(plotData, cutoff, fs, 3)
 
 # show the plot
 if showPlot:
     plt.title("LPF on Pitch angle")
     plt.ylabel("Angle")
     plt.xlabel("Time")
-    plt.plot(plotData, label="order5", color="g")
-    plt.plot(myValue1, label="order2", color="r")
+    plt.plot(plotData, label="Pitch Angle", color="g")
+    plt.plot(LPF, label="LPF", color="r")
     plt.legend(loc="best")
-    plt.savefig('imu_exercise_plot.png')
+    plt.savefig('imu_exercise_4.1.4_plot.png')
     plt.show()
