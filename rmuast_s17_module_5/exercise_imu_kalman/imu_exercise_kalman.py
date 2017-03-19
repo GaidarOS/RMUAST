@@ -27,20 +27,20 @@ show3DLiveViewInterval = 3
 # Insert initialize code below ###################
 
 # approx. bias values determined by averaging over static measurements
-bias_gyro_x = 0.0  # [rad/measurement]
-bias_gyro_y = 0.0  # [rad/measurement]
-bias_gyro_z = 0.0  # [rad/measurement]
+bias_gyro_x = 0.07535  # [rad/measurement]
+bias_gyro_y = 0.04165  # [rad/measurement]
+bias_gyro_z = 0.0008  # [rad/measurement]
 
 # variances
-gyroVar = 0.008
-pitchVar = 0.008
+gyroVar = 1.2
+pitchVar = 1
 
 # Kalman filter start guess
 estAngle = -pi / 4.0
-estVar = 0.5
+estVar = 1
 
 # Kalman filter housekeeping variables
-gyroVarAcc = 0.5
+gyroVarAcc = 1
 
 ######################################################
 
@@ -59,7 +59,9 @@ f = open(fileName, "r")
 
 # initialize variables
 count = 0
-
+xk1 = 0
+pk1 = 1
+R = 0.1
 # initialize 3D liveview
 if show3DLiveView:
     imuview = imu_visualize()
@@ -123,7 +125,7 @@ for line in f:
     # Insert your code here ##
 
     # calculate pitch (x-axis) and roll (y-axis) angles
-    pitch = atan2(acc_y, sqrt(acc_x**2 + acc_z**2))
+    pitch = atan2(acc_y, sqrt(acc_x ** 2 + acc_z ** 2))
     roll = atan2(-acc_x, acc_z)
 
     # integrate gyro velocities to releative angles
@@ -132,12 +134,21 @@ for line in f:
     gyro_z_rel += gyro_z * (ts_now - ts_prev)
 
     # Kalman prediction step (we have new data in each iteration)
+    # xk is the predicted value and xk1 the previous estimation
+    # same goes for pk
+    xk = xk1
+    pk = pk1 * gyroVar
 
     # Kalman correction step (we have new data in each iteration)
+    # following the formulas in kalman_filter_notes.pdf and in
+    # http://bilgin.esme.org/BitsAndBytes/KalmanFilterforDummies
+    # the correction step for the filter became the following
+    kGain = pk / (pk + R)
+    xk1 = xk + kGain * (pitch - xk)
+    pk1 = (1 - kGain) * pk
 
     # define which value to plot as the Kalman filter estimate
-    kalman_estimate = gyro_x_rel
-
+    kalman_estimate = xk1
     # define which value to plot as the absolute value (pitch/roll)
     pitch_roll_plot = pitch
 
@@ -154,8 +165,8 @@ for line in f:
         yaw_view = 0.0
         pitch_view = kalman_estimate
 
-        imuview.set_axis(-pitch_view, -yaw_view, roll_view)
-        imuview.update()
+        # imuview.set_axis(-pitch_view, -yaw_view, roll_view)
+        # imuview.update()
 
     # if plotting is enabled
     if showPlot:
@@ -179,6 +190,6 @@ if showPlot:
     plt.plot(plotDataAcc, 'blue')
     plt.plot(plotDataKalman, 'red')
     plt.savefig('imu_exercise_acc_kalman.png')
-    plt.draw()
+    plt.show()
     print('Press enter to quit')
-    input()
+    # input()

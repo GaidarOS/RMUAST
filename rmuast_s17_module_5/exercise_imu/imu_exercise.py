@@ -108,6 +108,7 @@ for line in f:
     # 4.1.3
     # myValue = atan2(acc_y, sqrt(acc_x**2 + acc_z**2))
     # myValue = atan2(-acc_x, acc_z)
+    print(ts_now-ts_prev)
     myValue = atan2(acc_y, sqrt(acc_x**2 + acc_z**2))
     fs = 101.5
     cutoff = 5

@@ -82,6 +82,9 @@ for line in f:
 
     #  Insert your code here ##
     # 4.2.2
+    # for  guro_x 0.07535
+    # for  guro_y 0.04165
+    # for  guro_z 0.0008
     myValue += (gyro_z - 0.0008) * (ts_now - ts_prev)
 
     # in order to show a plot use this function to append your value to a list:
