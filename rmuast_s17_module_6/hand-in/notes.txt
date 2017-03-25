@@ -1,0 +1,4 @@
+Handing in screenshots from flight controlling. The screenshots are of the
+terminals running alongside the simulation, to show that we actually did the exercise. 
+Lastly, only the simulation screenshot has been provided, using the offboard 
+code. 
