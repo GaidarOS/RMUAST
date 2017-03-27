@@ -1,0 +1,41 @@
+Very good. Here is a few comments.
+
+3.1
+2
+Looks okay, but did you compensate for the resistance added by the temperature coefficient?
+
+3.2
+1
+XSYP (from class)
+
+3
+SOH can change, but it is not really possible to calculate because how would you get the data? But you are right it is dependent on the things you mentioning, but found by the lost capacity which can be measured.
+
+4
+120A/5Ah = 24C NOT -> 120a/5aH = 24C
+
+6
+You should have got an email about using c-rate and specific energy instead of nominal capacity. Sorry for the confusion. 
+
+7
+If you chose the c-rate to fit the average current then you will damage your battery when you use 100 W/motor. It should be chosen by the maximum current. 
+
+3.3
+2
+And the balancing state.
+
+7
+The minimum c-rate should not be calculated from the average current, but the maximum.
+
+3.3
+2
+100 % SOC is not voltage dependent.
+
+3.4
+1
+0% when one cell is at 3.0 V for most Li-Po cells.
+
+3
+It could also be estimated with a 3. order polynomium. numpy.polyfit
+But it is good that you got the result. Good enough for what? It is better than knowing nothing about the SOC :) 
+
