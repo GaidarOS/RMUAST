@@ -1,0 +1,203 @@
+\documentclass[a4paper,10pt,fleqn]{article}
+
+%%% Packages
+\usepackage{graphicx} % use graphics
+\usepackage{color}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{url}
+\usepackage{multicol}
+
+% Dansk ops√¶tning (husk renew commands efter begin)
+\usepackage[utf8]{inputenc}
+\usepackage[danish]{babel}
+\usepackage[T1]{fontenc}
+
+%\usepackage{algorithm}
+%\usepackage{algorithmic}
+
+%%% Modify page layout
+\setlength{\textwidth}{160 mm} % line width
+\setlength{\oddsidemargin}{0 mm}  % left margin
+\setlength{\topmargin}{-1.5 cm} % top margin
+\setlength{\textheight}{25.0 cm} % page width
+%\pagestyle{empty} % remove page numbers
+\setlength{\parindent}{0 mm} % indent at the beginning of a paragraph
+\setlength{\parskip}{2 mm} % vertical distance between paragraphs
+
+% Text fonts
+\usepackage{palatino}
+
+\usepackage[hyperindex=true,pdftitle={},pdfauthor={},colorlinks=true,
+pagebackref=false,citecolor=blue,linkcolor=blue, urlcolor=blue, plainpages=false,
+%pagebackref=false,citecolor=black,linkcolor=black, urlcolor=black, plainpages=false,
+pdfpagelabels]{hyperref} % colourlinks=false for printing
+
+\usepackage[round,colon,authoryear]{natbib}
+
+\begin{document}
+
+\Large
+\textbf{Unmanned Aerial Systems Techology (RMUAST) Spring 2017 \\ University of Southern Denmark} \vspace{2mm}\\
+\large \textit{Created 2017-03-26 by Kjeld Jensen, \href{mailto:kjen@mmmi.sdu.dk}{kjen@mmmi.sdu.dk}} \\
+
+\vspace{3mm}
+
+\LARGE Module 7: Mission route plans, flight controllers.
+
+
+\normalsize
+%\vspace{10mm}
+
+\section{Practical information}
+
+\subsection{Materials}
+
+\begin{itemize}
+\item PC with internet access.
+\item Python
+\item Ladybird drone and Spektrum transmitter (available at the library, this is handled in class)
+\item AA batteries for transmitters (provided by Kjeld)
+
+\end{itemize}
+
+\subsection{Agenda}
+
+\begin{enumerate}
+	\item Practical information.
+\begin{itemize}
+	\item For equipment available at the library please identify one student from each group who will pick up the equipment, then email me the student name, so I can authorize the pick-up.
+\end{itemize}
+	\item Presentation of literature 
+	\item Team 3 and team 4: Presentation of results from module 6 exercises.
+	\item Theory for this module
+	\item Laboratory exercises for this module 
+\end{enumerate}
+
+
+\section{Preparation for next module}
+
+\begin{itemize}
+
+\item Finish laboratory exercises from this module. Remember to submit your lab report no later than Saturday this week.
+
+\item Team 5 please prepare a presentation of your laboratory results for Monday next week.
+
+\item There will be no presentation of literature in module 8 as we will be conducting a mid-term evaluation.
+
+%\item Bjarki Sigurdsson: Please prepare a presentation of \textit{.pdf} 
+
+%\item Tobias Jørgensen: Please prepare a presentation of \textit{.pdf} 
+
+\end{itemize}
+
+
+\section{Theory covered in this module}
+
+\subsection{Mission route plans}
+
+\begin{itemize}
+\item What defines a mission route plan
+\item Generation of route plans from drone tracks (multirotor and fixed wing)
+\end{itemize}
+
+\subsection{Flight controllers}
+
+\begin{itemize}
+\item Flight controllers, the game changer in unmanned aviation 
+\item Overall functionality
+\item Examples of widely used flight controllers (postponed due to new scientific publication)
+\item AutoQuad flight controller details
+\end{itemize}
+
+\section{Exercises}
+
+\subsection{Mission route plans}
+
+The objective of this exercise is learn about UAV track logs, static route plans and mission planning using ground control software. 
+
+\subsubsection{AQ Ground Control Station installation}
+\label{aqgcs}
+Please install AQ Ground Control Station (qgroundcontrol\_aq) following the guidelines available at  \\ \href{http://frobomind.org/autoquad/doku.php?id=gcs:aq_ground_control_station}{http://frobomind.org/autoquad}
+
+
+\subsubsection{Inspecting AutoQuad log files}
+The files \texttt{020-AQL.LOG} and \texttt{021-AQL.LOG} available in the module folder are AutoQuad log files. Open \texttt{qgroundcontrol\_aq} then go to the \texttt{Data} page and click \texttt{Select Log file...} to open \texttt{021-AQL.LOG}.
+
+Use the AutoQuad Log Viewer to view the \texttt{UKF\_POSD} variable. Please describe briefly what information this gives you about the conducted flight.
+
+Use the AutoQuad Log Viewer to view the \texttt{UKF\_POSN} and \texttt{UKF\_POSE} variables along with the \texttt{UKF\_POSD} variable. Please describe briefly what information this gives you about the conducted flight. 
+
+Feel free to experiment with other variables. As you will see, other relevant info such as radio input, motor output, battery voltage etc. are available. Please notice that you can easily zoom in on a specific part of the plot.
+
+\subsubsection{Generating mission route plans}
+Use the \texttt{aqlogreader} Python script available in the module folder to import track data from the file \texttt{021-AQL.LOG}. 
+
+Create a Python class to generate a route plan consisting of waypoints (latitude, longitude, altitude, heading) based on the track data removing excessive track points.
+
+The class should perform the conversion base on the different input parameters below: 
+\begin{enumerate}
+\item maximum distance deviation from track (multirotor).
+\item maximum waypoints allowed (multirotor).
+\item maximum distance and bearing angle deviation from track (fixed wing).
+\end{enumerate}
+
+Please look into the literature to find existing algorithms or devise your own.
+
+Plot both the track log and generated route plan using Google Earth using the \texttt{export\_kml.py} class available under course materials.
+
+Test your route plan class using as input the NMEA data (for which you developed an import class in module 1) from the file \texttt{nmea\_trimble\_gnss\_eduquad\_flight.txt}
+
+
+Present the algorithm, your results and discuss advantages/disadvantages in the report. 
+
+\subsubsection{Exporting mission route plans to AutoQuad}
+
+Export the route plan in a format readable by \texttt{qgroundcontrol\_aq}. Please encapsulate the export functions in a class for future code reuse. Please add configurable parameters for static value. Please notice that in the module folder you will find a file named \texttt{export\_qgc\_aq\_snippets.py} containing code snippets which will probably help you significantly. The snippets have been tested to work with the \texttt{qgroundcontrol\_aq}.
+
+When you have exported the route plan, you can test it by uploading the plan to a LadyBird drone using \texttt{qgroundcontrol\_aq} then downloading it again and save it to see if there are any changes.
+
+\subsection{Drone flight}
+
+This is where you get to fly the LadyBird drone at the drone cage in RoboLab. Please approach me if you have any questions. I will try to add answers to all questions to this \href{http://frobomind.org/autoquad}{http://frobomind.org/autoquad} for future reference.
+
+
+\subsection{AutoQuad flight controller (team 1,3,4,5)}
+
+\subsubsection{AQ Ground Control Station}
+
+This software was installed as part of exercise \ref{aqgcs}. Please connect to the LadyBird drone. Observe that telemetry such as drone attitude is accessible 
+
+
+\subsubsection{AutoQuad flight controller firmware flashing}
+
+The objective of this exercise is to learn about the AutoQuad M4 flight controller software including how to compile and reflash the hardware. 
+
+Please read the flash howto at \href{http://frobomind.org/autoquad}{http://frobomind.org/autoquad} and write in your report your observations and comments. Please include anything that may improve the documentation such as relevant links to source, documentation, tools used etc.
+
+Please make sure that you do not switch the ST-Link USB adapter and connection cable with another one as they come with different pin configurations.
+
+\begin{enumerate}
+\item Read out a copy of the current M4 flash (not yet documented in the AQ wiki above).
+\item Make a note of the Quatos serial using \texttt{qgroundcontrol\_aq}   (not yet documented in the AQ wiki above).
+\item Do \textbf{not} proceed until the above tasks are completed: Reflash the M4 with a \href{http://autoquad.org/software-downloads}{stock flash} to ensure that the flash procedure works. Test that the Ladybird is still able to fly.
+\item Recompile the AutoQuad source with Quatos disabled and reflash the M4 with this. Use the GCC tool chain for this.
+\item Try to trim the PID parameters to make the Ladybird fly (do not spend too much time on this).
+\item Reflash the M4 back to the original flash and verify that the Ladybird is still able to fly.
+\end{enumerate}
+
+
+\subsection{Education drone flight controller (team 2)}
+Given the significant experience in AutoQuad represented in this team you will be working with another drone.
+
+We have just received a new education drone from a university in Austria, and have very little knowledge about it. Your task is therefore open-ended: The objective is to assess if the drone is suitable for educational activities and if it contains technology that is worth looking further into. If possible please perform some flight tests in the drone cage currently put up in RoboLab. Please put your assessment conclusions and technical details in your lab report.
+
+Please notice that shorts have been observed on the CPU chip. Please check that this make sense or remove them before first power up if critical. To my knowledge the drone has been tested, I am waiting for confirmation on this, and I may have an answer before you begin.
+
+
+\subsection{Pixhawk flight controller (team 6)}
+Given the significant experience in AutoQuad represented in this team you will be working with another drone.
+
+You will be issued a 3DR Iris drone based on the Pixhawk flight controller. Your task is open-ended: The objective is to prepare the drone for flight (it should be more or less ready) including performing relevant calibrations etc. If possible please perform some flight tests in the drone cage currently put up in RoboLab. Please devise a brief Standard Operating Procedures (SOP) including relevant guidelines and put it in your lab report.
+
+\end{document}
