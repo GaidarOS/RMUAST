@@ -1,14 +1,19 @@
 from aqlogreader import utm
-from math import sqrt
+from math import hypot
+from export_kml import kmlclass
 
-
+# Initiate classes
+kml = kmlclass()
 gsm = utm.utmconv()
+
+# Initiate variables
+threshold = 1  # Change this value to increase/decrease the amount of checkpoints
 oldPath = []
 newPath = []
-threshold = 1  # Change this value to increase/decrease the amount of checkpoints
 cpLat = []
 cpLng = []
 coords = []
+corAlt = []
 
 line = [line.rstrip('\n') for line in open('latlon.txt', 'r')]
 for item in line:
@@ -18,29 +23,49 @@ for item in line:
         # Lng: item[1]
         # Alt: item[2][:-1])
         # Euclidean distance for all 3 points
+        print(item)
         if float(item[1]) != 0.0:
             oldPath.append(gsm.geodetic_to_utm(float(item[0][1:]), float(item[1])))
             # coords.append("{}, {}, {}".format(item[0][1:], item[1], item[2][:-1]))
-            coords.append([item[0][1:], item[1], item[2][:-1]])
-            # Altidute: coords[i][2] for use outside of the "data parsing loop"
+            coords.append([float(item[0][1:]), float(item[1]), float(item[2][:-1])])
+            # Altitude: coords[i][2] for use outside of the "data parsing loop"
 
 
+# Loop for calculating the best checkpoint from the available gps coordinates
 for i in range(len(oldPath)):
     if i == 0:
         initLat = oldPath[i][3]
         initLng = oldPath[i][4]
+        cpLat.append(oldPath[i][3])
+        cpLng.append(oldPath[i][4])
+        corAlt.append(coords[i][2])
+
     nextLat = oldPath[i][3] - initLat
     nextLng = oldPath[i][4] - initLng
-    dstnc = sqrt(nextLat**2 + nextLng**2)
+    dstnc = hypot(nextLat, nextLng)
+    # dstnc = sqrt(nextLat**2 + nextLng**2)
     if dstnc > threshold:
+        corAlt.append(coords[i][2])
         initLat = oldPath[i][3]
         initLng = oldPath[i][4]
         cpLat.append(oldPath[i][3])
         cpLng.append(oldPath[i][4])
 
-# print("Latitude:", cpLat)
-# print("Longitude:", cpLng)
-# print(len(cpLng))
+# print(len(cpLng))  # Uncomment to see the new total of points
+
+# Create kml file to use with the gmaps api {begin(self, fname, name, desc, width)}
+kml.begin('TrackMap.kml', 'Track map', 'Track map for drone\'s coordinates', 2)
+# Genarating section begining {trksegbegin(self, segname, segdesc, color, altitude)}
+kml.trksegbegin('Blue Line', 'Track coords', 'blue', 'relativeToGround')
 
 for i in range(len(cpLat)):
-    newPath.append(gsm.utm_to_geodetic("N", 32, cpLat[i], cpLng[i]))
+    newPath.append([gsm.utm_to_geodetic("N", 32, cpLat[i], cpLng[i]), corAlt[i]])
+    # Generating coordinate pairs {trkpt(self, lat, lon, ele)}
+    kml.trkpt(newPath[i][0][0], newPath[i][0][1], newPath[i][1])
+
+# End coordinate section {no args}
+kml.trksegend()
+# End and close file {no arguments}
+kml.end()
+
+print(newPath[0][:][:])
