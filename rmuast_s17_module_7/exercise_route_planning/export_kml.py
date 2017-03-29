@@ -30,82 +30,83 @@
 2015-03-22 Kjeld Removed unnecessary trkptend() function
 2015-11-18 Kjeld Added optional absolute altitude mode
 '''
+
+
 class kmlclass:
 
     def __init__(self):
         return
 
     def begin(self, fname, name, desc, width):
-        self.f = open (fname, 'w')
-        self.f.write ('<?xml version="1.0" encoding="UTF-8"?>\n')
-        self.f.write ('<kml xmlns="http://www.opengis.net/kml/2.2">\n')
-        self.f.write ('<Document>\n')
-        self.f.write ('<name>%s</name>\n' % (name))
-        self.f.write ('<description>%s</description>\n' % (desc))
-        self.f.write ('<Style id="red">\n')
-        self.f.write ('  <LineStyle>\n')
-        self.f.write ('    <color>ff0000ff</color>\n')      
-        self.f.write ('    <width>%.1f</width>\n' % (width))
-        self.f.write ('  </LineStyle>\n')
-        self.f.write ('</Style>\n')
-        self.f.write ('<Style id="green">\n')
-        self.f.write ('  <LineStyle>\n')
-        self.f.write ('    <color>ff00ff00</color>\n')
-        self.f.write ('    <width>%.1f</width>\n' % (width))
-        self.f.write ('  </LineStyle>\n')
-        self.f.write ('</Style>\n')
-        self.f.write ('<Style id="blue">\n')
-        self.f.write ('  <LineStyle>\n')
-        self.f.write ('    <color>ffff0000</color>\n')
-        self.f.write ('    <width>%.1f</width>\n' % (width))
-        self.f.write ('  </LineStyle>\n')
-        self.f.write ('</Style>\n')
-        self.f.write ('<Style id="cyan">\n')
-        self.f.write ('  <LineStyle>\n')
-        self.f.write ('    <color>ffffff00</color>\n')
-        self.f.write ('    <width>%.1f</width>\n' % (width))
-        self.f.write ('  </LineStyle>\n')
-        self.f.write ('</Style>\n')
-        self.f.write ('<Style id="yellow">\n')
-        self.f.write ('  <LineStyle>\n')
-        self.f.write ('    <color>ff00ffff</color>\n')
-        self.f.write ('    <width>%.1f</width>\n' % (width))
-        self.f.write ('  </LineStyle>\n')
-        self.f.write ('</Style>\n')
-        self.f.write ('<Style id="grey">\n')
-        self.f.write ('  <LineStyle>\n')
-        self.f.write ('    <color>ff888888</color>\n')
-        self.f.write ('    <width>%.1f</width>\n' % (width))
-        self.f.write ('  </LineStyle>\n')
-        self.f.write ('</Style>\n')
+        self.f = open(fname, 'w')
+        self.f.write('<?xml version="1.0" encoding="UTF-8"?>\n')
+        self.f.write('<kml xmlns="http://www.opengis.net/kml/2.2">\n')
+        self.f.write('<Document>\n')
+        self.f.write('<name>%s</name>\n' % (name))
+        self.f.write('<description>%s</description>\n' % (desc))
+        self.f.write('<Style id="red">\n')
+        self.f.write('  <LineStyle>\n')
+        self.f.write('    <color>ff0000ff</color>\n')
+        self.f.write('    <width>%.1f</width>\n' % (width))
+        self.f.write('  </LineStyle>\n')
+        self.f.write('</Style>\n')
+        self.f.write('<Style id="green">\n')
+        self.f.write('  <LineStyle>\n')
+        self.f.write('    <color>ff00ff00</color>\n')
+        self.f.write('    <width>%.1f</width>\n' % (width))
+        self.f.write('  </LineStyle>\n')
+        self.f.write('</Style>\n')
+        self.f.write('<Style id="blue">\n')
+        self.f.write('  <LineStyle>\n')
+        self.f.write('    <color>ffff0000</color>\n')
+        self.f.write('    <width>%.1f</width>\n' % (width))
+        self.f.write('  </LineStyle>\n')
+        self.f.write('</Style>\n')
+        self.f.write('<Style id="cyan">\n')
+        self.f.write('  <LineStyle>\n')
+        self.f.write('    <color>ffffff00</color>\n')
+        self.f.write('    <width>%.1f</width>\n' % (width))
+        self.f.write('  </LineStyle>\n')
+        self.f.write('</Style>\n')
+        self.f.write('<Style id="yellow">\n')
+        self.f.write('  <LineStyle>\n')
+        self.f.write('    <color>ff00ffff</color>\n')
+        self.f.write('    <width>%.1f</width>\n' % (width))
+        self.f.write('  </LineStyle>\n')
+        self.f.write('</Style>\n')
+        self.f.write('<Style id="grey">\n')
+        self.f.write('  <LineStyle>\n')
+        self.f.write('    <color>ff888888</color>\n')
+        self.f.write('    <width>%.1f</width>\n' % (width))
+        self.f.write('  </LineStyle>\n')
+        self.f.write('</Style>\n')
         return
 
     def trksegbegin(self, segname, segdesc, color, altitude):
-        self.f.write ('<Placemark>\n')
-        self.f.write ('<name>%s</name>\n' % (segname))
-        self.f.write ('<description>%s</description>\n' % (segdesc))
-        self.f.write ('<styleUrl>#%s</styleUrl>\n' % (color))
-        self.f.write ('<LineString>\n')
-	if altitude == 'absolute': 
-	       self.f.write ('<altitudeMode>absolute</altitudeMode>\n')
-	elif  altitude == 'relativeToGround': 
-	       self.f.write ('<altitudeMode>relativeToGround</altitudeMode>\n')
-        self.f.write ('<coordinates>\n')
+        self.f.write('<Placemark>\n')
+        self.f.write('<name>%s</name>\n' % (segname))
+        self.f.write('<description>%s</description>\n' % (segdesc))
+        self.f.write('<styleUrl>#%s</styleUrl>\n' % (color))
+        self.f.write('<LineString>\n')
+        if altitude == 'absolute':
+            self.f.write('<altitudeMode>absolute</altitudeMode>\n')
+        elif altitude == 'relativeToGround':
+            self.f.write('<altitudeMode>relativeToGround</altitudeMode>\n')
+        self.f.write('<coordinates>\n')
         return
 
     def trksegend(self):
-        self.f.write ('</coordinates>\n')
-        self.f.write ('</LineString>\n')
-        self.f.write ('</Placemark>\n')
+        self.f.write('</coordinates>\n')
+        self.f.write('</LineString>\n')
+        self.f.write('</Placemark>\n')
         return
 
     def trkpt(self, lat, lon, ele):
-        self.f.write ('%013.10f,%014.10f,%.3f\n' % (lon, lat, ele))
+        self.f.write('%013.10f,%013.10f,%.3f\n' % (lon, lat, ele))
         return
 
     def end(self):
-        self.f.write ('</Document>\n')
-        self.f.write ('</kml>')
-        self.f.close ()
+        self.f.write('</Document>\n')
+        self.f.write('</kml>')
+        self.f.close()
         return
-
