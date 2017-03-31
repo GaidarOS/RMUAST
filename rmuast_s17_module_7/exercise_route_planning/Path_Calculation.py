@@ -1,6 +1,7 @@
 from aqlogreader import utm
-from math import hypot
+from math import hypot, sqrt
 from export_kml import kmlclass
+from aqlogreader import Nmea_Parse
 
 
 def CheckpointEstimation(oldPath, coords, threshold):
@@ -12,27 +13,31 @@ def CheckpointEstimation(oldPath, coords, threshold):
         if i == 0:
             initLat = oldPath[i][3]
             initLng = oldPath[i][4]
+            initAlt = coords[i][2]
             cpLat.append(oldPath[i][3])
             cpLng.append(oldPath[i][4])
             corAlt.append(coords[i][2])
-
         nextLat = oldPath[i][3] - initLat
         nextLng = oldPath[i][4] - initLng
+        nextAlt = coords[i][2] - initAlt
         dstnc = hypot(nextLat, nextLng)
-        # dstnc = sqrt(nextLat**2 + nextLng**2)
+        dstnc = hypot(dstnc, nextAlt)
+        # dstn = sqrt(nextLng**2 + nextLng**2 + nextAlt**2)
         if dstnc > threshold:
-            corAlt.append(coords[i][2])
             initLat = oldPath[i][3]
             initLng = oldPath[i][4]
+            initAlt = coords[i][2]
             cpLat.append(oldPath[i][3])
             cpLng.append(oldPath[i][4])
-    print(len(cpLng))
+            corAlt.append(coords[i][2])
+    print(len(cpLat))
     return cpLat, cpLng, corAlt
 
 
 # Initiate classes
 kml = kmlclass()
 gsm = utm.utmconv()
+nmea = Nmea_Parse.NmeaRead()
 
 # Initiate variables
 threshold = 1  # Change this value to increase/decrease the amount of checkpoints
@@ -92,5 +97,25 @@ for i in range(len(cpLat)):
 # End coordinate section {no args}
 kml.trksegend()
 
+# End and close file {no arguments}
+kml.end()
+
+latlng, alt, sat, time = nmea.NmeaDataParce("nmea_trimble_gnss_eduquad_flight.txt")
+# Create kml file to use with the gmaps api {begin(self, fname, name, desc, width)}
+kml.begin('TrackMapNmea.kml', 'Track map', 'Track map for drone\'s coordinates', 2)
+# Genarating section begining {trksegbegin(self, segname, segdesc, color, altitude)}
+kml.trksegbegin('Blue Line', 'Track coords', 'blue', 'relativeToGround')
+for i in range(len(latlng)):
+    kml.trkpt(latlng[i][0], latlng[i][1], alt[i])
+# End coordinate section {no args}
+kml.trksegend()
+
+kml.trksegbegin('Red Line', 'Track coords', 'red', 'relativeToGround')
+cpLat, cpLng, corAlt = CheckpointEstimation(latlng, corAlt, threshold=5)
+
+for i in range(len(cpLat)):
+    kml.trkpt(cpLat[i], cpLng[i], corAlt[i])
+# End coordinate section {no args}
+kml.trksegend()
 # End and close file {no arguments}
 kml.end()

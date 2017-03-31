@@ -1,3 +1,5 @@
+#!/usr/bin/python
+
 from aqlogreader import AQLogReader
 # from aqlogreader import utm
 
