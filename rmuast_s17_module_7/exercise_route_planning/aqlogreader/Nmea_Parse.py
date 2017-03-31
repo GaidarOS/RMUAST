@@ -59,4 +59,4 @@ class NmeaRead():
                 altitudeList.append(float(altitude))
                 satelliteList.append(float(satellitesTracked))
                 timeList.append(float(time) / 10000)
-        return (convLat, convLng), altitudeList, satelliteList, timeList
+        return convLat, convLng, altitudeList, satelliteList, timeList

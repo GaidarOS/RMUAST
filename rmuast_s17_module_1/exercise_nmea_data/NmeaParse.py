@@ -1,8 +1,3 @@
-#!/usr/bin/python3.5
-# __authors__= ""\
-from __future__ import print_function  # support for Pyhon 2.7 - comment out if you use python>2.7.
-from exportkml import kmlclass
-from matplotlib import pyplot as plt
 
 
 def convertLatLon(latitude, longitude):
@@ -53,36 +48,3 @@ def NmeaDataParse(filename):
             satelliteList.append(float(satellitesTracked))
             timeList.append(float(time) / 10000)
     return convLat, convLng, altitudeList, satelliteList, timeList
-
-
-# Initiate class
-kml = kmlclass()
-# Create kml file to use with the gmaps api {begin(self, fname, name, desc, width)}
-kml.begin('TrackMap', 'Track map', 'Track map for drone\'s coordinates', 2)
-# Genarating section begining {trksegbegin(self, segname, segdesc, color, altitude)}
-kml.trksegbegin('Blue Line', 'Track coords', 'blue', 'relativeToGround')
-
-converted_latitude, converted_longitude, altitudeList, satelliteList, timeList = NmeaDataParse("nmea_trimble_gnss_eduquad_flight.txt")
-
-# Generating coordinate pairs {trkpt(self, lat, lon, ele)}
-for i in range(len(converted_latitude)):
-    kml.trkpt(converted_latitude[i], converted_longitude[i], altitudeList[i])
-
-# End coordinate section {no args}
-kml.trksegend()
-# End and close file {no arguments}
-kml.end()
-
-# Plot to visualize the altitude change in respect to time
-plt.plot(timeList, altitudeList)
-plt.title('Altitude above Mean Sea Level')
-plt.ylabel('Altitude in meters')
-plt.xlabel('Timestamp')
-plt.show()
-
-# Plot to visualize the tracked satellites every time
-plt.plot(timeList, satelliteList)
-plt.title('Number of satellites tracked')
-plt.ylabel('Satellites tracked')
-plt.xlabel('Timestamp')
-plt.show()
