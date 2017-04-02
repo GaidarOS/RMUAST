@@ -1,0 +1,196 @@
+\documentclass[a4paper,10pt,fleqn]{article}
+
+%%% Packages
+\usepackage{graphicx} % use graphics
+\usepackage{color}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{url}
+\usepackage{multicol}
+
+% Dansk ops√¶tning (husk renew commands efter begin)
+\usepackage[utf8]{inputenc}
+\usepackage[danish]{babel}
+\usepackage[T1]{fontenc}
+
+%\usepackage{algorithm}
+%\usepackage{algorithmic}
+
+%%% Modify page layout
+\setlength{\textwidth}{160 mm} % line width
+\setlength{\oddsidemargin}{0 mm}  % left margin
+\setlength{\topmargin}{-1.5 cm} % top margin
+\setlength{\textheight}{25.0 cm} % page width
+%\pagestyle{empty} % remove page numbers
+\setlength{\parindent}{0 mm} % indent at the beginning of a paragraph
+\setlength{\parskip}{2 mm} % vertical distance between paragraphs
+
+% Text fonts
+\usepackage{palatino}
+
+\usepackage[hyperindex=true,pdftitle={},pdfauthor={},colorlinks=true,
+pagebackref=false,citecolor=blue,linkcolor=blue, urlcolor=blue, plainpages=false,
+%pagebackref=false,citecolor=black,linkcolor=black, urlcolor=black, plainpages=false,
+pdfpagelabels]{hyperref} % colourlinks=false for printing
+
+\usepackage[round,colon,authoryear]{natbib}
+
+\begin{document}
+
+\Large
+\textbf{Unmanned Aerial Systems Techology (RMUAST) Spring 2017 \\ University of Southern Denmark} \vspace{2mm}\\
+\large \textit{Created 2017-03-31 by Kjeld Jensen, \href{mailto:kjen@mmmi.sdu.dk}{kjen@mmmi.sdu.dk}} \\
+
+\vspace{3mm}
+
+\LARGE Module 8: Wireless communications, C2 \& telemetry links
+
+\normalsize
+%\vspace{10mm}
+
+\section{Practical information}
+
+\subsection{Materials}
+
+\begin{itemize}
+\item PC with internet access.
+\item Python
+\item LibreOffice, Excel or a similar spreadsheet app.
+
+\end{itemize}
+
+\subsection{Agenda}
+
+\begin{enumerate}
+	\item Practical information: Kits at the library, wiki updates.
+	\item Presentation of the \textit{WG6\_SORA\_V0.2\_External\_Consultation.pdf} publication.
+	\item Presentation of results from module 7 exercises by team 5.
+	\item Theory for this module
+	\item Laboratory exercises for this module 
+	\item Questionary from Module 6
+	\item Course midterm evaluation
+\end{enumerate}
+
+
+\section{Preparation for next module}
+
+\begin{itemize}
+
+\item Finish laboratory exercises from this module. Remember to submit your lab report no later than Saturday this week.
+
+\item Team  6 please prepare a presentation of your laboratory results for Monday next week.
+
+\item Bjarki Sigurdsson: Please prepare a presentation of \textit{UAS Safety Assessment and Functional Requirements.pdf} 
+
+\item Tobias Jørgensen: Please prepare a presentation of \textit{2016 Towards UAV Contour Flight Over Agricultural Fields.pdf} 
+
+\item Stefan Ravn: Please prepare a presentation of \textit{2016 Real time back-projection onto prerecorded DHM surface.pdf} 
+
+\end{itemize}
+
+
+\section{Theory covered in this module}
+
+\begin{enumerate}
+	\item Radio wave propagation
+	\item Radio frequency spectrum
+	\item Antennas, gain, reprocity
+	\begin{itemize}
+		\item isotropic
+		\item half wave dipole
+		\item quater wave ground-plane
+		\item yagi-uda 
+	\end{itemize}
+	\item Feed lines and connector attenuation
+	\item Path loss, inverse square law, near field obstacles, Fresnel zones, polarization
+\end{enumerate}
+
+
+\section{Exercises}
+
+\subsection{Radio link budget}
+The objective of this exercise is to learn about radio link budgets and how they may be applied when designing radio communication systems for drones.
+
+\subsubsection{Unit conversion mW and dbm}
+
+What is the unit conversion between power expressed in mW and dBm? What is the value in dBm for 100mW, 500mW and 1W?
+
+\subsubsection{Free-space basic transmission loss}
+\label{sec:freesp}
+The \textit{free-space basic transmission loss} (attenuation) $L_{bf}$ expressed in $dB$ in equation \ref{eq:freespaceloss} where $P_r$ is the power received by an isotropic antenna, $P_t$ is the power transmitted by an isotropic antenna, $f$ is the frequency in MHz, $d$ is the distance in meter between transmitter and receiver \footnote{RECOMMENDATION ITU-R P.525-2}. 
+
+\begin{eqnarray}
+\frac{P_t}{P_r} &=& \left(\frac{4 \pi f d}{300}\right)^2 \\
+L_{bf} &=& 10 \, log_{10}\left(\frac{4 \pi f d}{300}\right)^2 = 20 \, log_{10}\left(\frac{4 \pi f d}{300}\right) \\
+&\approx& -27.55 + 20 \, log_{10} (f) + 20 \, log_{10}\left(d\right)
+\label{eq:freespaceloss}
+\end{eqnarray}
+
+Please explain in words what is free-space basic transmission loss and what physical properties contributes to this?
+
+\subsubsection{Radio link budget}
+A radio link budget contains the following factors listed below expressed in decibels. Optionally the calculation may include Bit Error Rate (BER) for digital links.
+
+\begin{enumerate}
+	\item The transmitted power level
+	\item Signal loss as it travels to the receiver (free-space)
+	\item Frequency band background noise level (what is the minimum SNR that will allow the receiver to extract a usable signal).
+	\item How the transmitting and receiving antenna systems shape the signal
+	\item Receiver sensitivity
+\end{enumerate}
+
+
+Please create (and document) a radio link budget for a a 2.4 GHz C2 link, a 433 MHz telemetry link and a 5.8 GHz video downlink respectively. This is not a trivial task, and you may want to search the web for examples of radio link budgets. The course materials for this module contains a few references as well.
+
+\subsection{Near field absorption and Fresnel zones}
+The objective of this exercise is to learn about near field absorption and Fresnel zones and how they relate to drone technology.
+
+
+\subsubsection{Near field absorptions}
+Please explain what is \textit{near field absorption} and to the extent possible based on information available on the web please quantify the signal attenuation.
+
+\subsubsection{Fresnel zones}
+Please explain in details using a sketch or an image from the web what is a Fresnel zone (equation \ref{eq:fresnel}) and how does it relate to drone C2 and telemetry links?
+
+
+\begin{equation}
+F_n = \sqrt{\frac{n\, \lambda \, (d_1\, d_2)}{d_1 + d_2}}
+\label{eq:fresnel}
+\end{equation}
+
+
+\subsubsection{Plotting Fresnel zones}
+Using Python please plot the Fresnel zones for a 2.4 GHz C2 link, a 433 MHz telemetry link and a 5.8 GHz video downlink respectively. 
+
+\subsubsection{Fresnel zone loss}
+Assuming that the greatest Fresnel zone losses occur when a diffracting object blocks about 40\% of the 1st Fresnel zone. Please calculate and discuss what this means to a drone at a height of 50m with respect to the ground at 400m distance from an operator sitting on the ground holding the TX at an approx height of 0.5m.
+
+Please consider another situation where a standing drone operator controls a drone at 200m distance. The drone is visible just above the ride line of the metal roof of a building at a distance of 30 meter. How much visual clearance must there be between the direct line of sight and the ridge line to ensure that the first Fresnel zone is clear for a 2.4 GHz C2 link, a 433 MHz telemetry link and a 5.8 GHz video downlink respectively?
+
+
+\subsection{Path loss model based on terrain contours}
+
+Use the \href{http://www.sws.bom.gov.au/Category/HF\%20Systems/Online\%20Tools/Prediction\%20Tools/VUHF/VUHF.php}{VHF/UHF Area Prediction Tool} to model path loss influenced by the terrain contours. Is the result comparable to the free space loss estimated in exercuse \ref{sec:freesp} if you select HCA Airport as location (N55.47036, E010.32967)? What if you select Svanninge Bakker (N55.12518, E010.25419)?
+
+
+\section{Course midterm evaluation}
+
+It is time to perform a midterm evaluation of the RMUAST course. Here is the procedure that we will follow:
+
+\begin{enumerate}
+	\item You will temporarily be divided into new teams.
+	\item Within the team you will discuss the topics listed below. The objective is to reach a conclusion within the team and list suggestions for improvements. 
+	\begin{itemize}
+		\item learning goals
+		\item level of difficulty
+		\item teaching methods
+		\item teaching materials
+		\item own performance
+	\end{itemize}
+	One team member should be appointed as referent posting conclusions and suggestions to \href{mailto:kjen@mmmi.sdu.dk}{kjen@mmmi.sdu.dk}
+	\item We will conclude the evaluation with an open debate.
+\end{enumerate}
+
+
+
+\end{document}
