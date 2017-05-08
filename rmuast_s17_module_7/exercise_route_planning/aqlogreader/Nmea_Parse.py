@@ -1,4 +1,6 @@
 #!/usr/bin/python3.5
+
+
 class NmeaRead():
 
     def __init__(self, filename=None):
