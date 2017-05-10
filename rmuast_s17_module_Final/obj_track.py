@@ -16,8 +16,8 @@ args = vars(ap.parse_args())
 
 # define the lower and upper boundaries of the "green"
 # ball in the HSV color space
-greenLower = (97, 185, 138)
-greenUpper = (113, 255, 255)
+greenLower = (105, 69, 113)
+greenUpper = (154, 252, 247)
 
 # initialize the list of tracked points, the frame counter,
 # and the coordinate deltas
@@ -25,6 +25,7 @@ pts = deque(maxlen=args["buffer"])
 counter = 0
 (dX, dY) = (0, 0)
 direction = ""
+combined = ""
 
 # if a video path was not supplied, grab the reference
 # to the webcam
@@ -40,6 +41,7 @@ while True:
     frame = imutils.resize(frame, width=600)
     blurred = cv2.GaussianBlur(frame, (11, 11), 0)
     hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+    height, width, channels = frame.shape
 
     # construct a mask for the color "green", then perform
     # a series of dilations and erosions to remove any small
@@ -62,9 +64,32 @@ while True:
         ((x, y), radius) = cv2.minEnclosingCircle(c)
         M = cv2.moments(c)
         center = (int(M["m10"] / M["m00"]), int(M["m01"] / M["m00"]))
+        # print("center", center)  # contour center position in (width, height) format
+
+        # if center[0] > width / 2:  # check if object is at the center of y axis
+        #     if (width / 2) - center[0] > 5:
+        #         print("need more speed left")
+        #     elif (width / 2) - center[0] > 75:
+        #         print("Give more speed")
+        #     elif (width / 2) - center[0] > 150:
+        #         print("Give moar speed")
+        #     elif (width / 2) - center[0] > 250:
+        #         print("Give much more speed")
+        # else:
+        #     if (width / 2) - center[0] < 5:
+        #         print("need more speed right")
+        #     elif (width / 2) - center[0] < 75:
+        #         print("Give more speed right")
+        #     elif (width / 2) - center[0] < 150:
+        #         print("Give moar speed right")
+        #     elif (width / 2) - center[0] < 250:
+        #         print("Give much more speed right")# print((width / 2) - center[0])
+
+        # if center[1] > height / 2:  # check if object is at the center of x axis
+        #     print((height / 2) - center[1])
 
         # only proceed if the radius meets a minimum size
-        if radius > 10:
+        if radius > 1:
             # draw the circle and centroid on the frame,
             # then update the list of tracked points
             cv2.circle(frame, (int(x), int(y)), int(radius),
@@ -79,33 +104,45 @@ while True:
         if pts[i - 1] is None or pts[i] is None:
             continue
 
+
         # check to see if enough points have been accumulated in
         # the buffer
-        if counter >= 10 and i == 1 and pts[-10] is not None:
-            # compute the difference between the x and y
-            # coordinates and re-initialize the direction
-            # text variables
-            dX = pts[-10][0] - pts[i][0]
-            dY = pts[-10][1] - pts[i][1]
-            (dirX, dirY) = ("", "")
+        try:
+            if counter >= 10 and i == 1 and pts[-10] is not None:
+                # compute the difference between the x and y
+                # coordinates and re-initialize the direction
+                # text variables
+                # dX = (pts[-10][0] - pts[i][0])
+                # dY = (pts[-10][1] - pts[i][1])
+                try:
+                    (dX, dY) = center
+                except TypeError:
+                    pass
+                dX -= (width / 2)
+                dY -= (height / 2)
+                (dirX, dirY) = ("", "")
+                (velX, velY) = ("0", "0")
+                # ensure there is significant movement in the
+                # x-direction
+                if abs(dX) > 5:
+                    velX = 1 * dX if np.sign(dX) == 1 else -1 * abs(dX)
+                    # dirX = "East" if np.sign(dX) == 1 else "West"
 
-            # ensure there is significant movement in the
-            # x-direction
-            if np.abs(dX) > 20:
-                dirX = "East" if np.sign(dX) == 1 else "West"
-
-            # ensure there is significant movement in the
-            # y-direction
-            if np.abs(dY) > 20:
-                dirY = "North" if np.sign(dY) == 1 else "South"
- 
-            # handle when both directions are non-empty
-            if dirX != "" and dirY != "":
-                direction = "{}-{}".format(dirY, dirX)
- 
-            # otherwise, only one direction is non-empty
-            else:
-                direction = dirX if dirX != "" else dirY
+                # ensure there is significant movement in the
+                # y-direction
+                if abs(dY) > 5:
+                    velY = 1 * dY if np.sign(dY) == 1 else -1 * abs(dY)
+                    dirY = "North" if np.sign(dY) == 1 else "South"
+                # handle when both directions are non-empty
+                if velX != "" and velY != "":
+                    combined = "{}:{}".format(velX, velY)
+                    direction = "{}:{}".format(dirY, dirX)
+                # otherwise, only one direction is non-empty
+                else:
+                    combined = velX if velX != "" else velY
+                    direction = dirX if dirX != "" else dirY
+        except IndexError:
+            pass
         # otherwise, compute the thickness of the line and
         # draw the connecting lines
         thickness = int(np.sqrt(args["buffer"] / float(i + 1)) * 2.5)
@@ -113,7 +150,7 @@ while True:
 
     # show the movement deltas and the direction of movement on
     # the frame
-    cv2.putText(frame, direction, (10, 30), cv2.FONT_HERSHEY_SIMPLEX,
+    cv2.putText(frame, combined, (10, 30), cv2.FONT_HERSHEY_SIMPLEX,
                 0.65, (0, 0, 255), 3)
     cv2.putText(frame, "dx: {}, dy: {}".format(dX, dY),
                 (10, frame.shape[0] - 10), cv2.FONT_HERSHEY_SIMPLEX,
