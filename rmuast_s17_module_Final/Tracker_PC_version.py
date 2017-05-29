@@ -16,9 +16,8 @@ args = vars(ap.parse_args())
 
 # define the lower and upper boundaries of the "green"
 # ball in the HSV color space
-greenLower = (105, 69, 113)
-greenUpper = (154, 252, 247)
-
+greenLower = (61, 78, 60)
+greenUpper = (135, 255, 255)
 # initialize the list of tracked points, the frame counter,
 # and the coordinate deltas
 pts = deque(maxlen=args["buffer"])
@@ -66,28 +65,6 @@ while True:
         center = (int(M["m10"] / M["m00"]), int(M["m01"] / M["m00"]))
         # print("center", center)  # contour center position in (width, height) format
 
-        # if center[0] > width / 2:  # check if object is at the center of y axis
-        #     if (width / 2) - center[0] > 5:
-        #         print("need more speed left")
-        #     elif (width / 2) - center[0] > 75:
-        #         print("Give more speed")
-        #     elif (width / 2) - center[0] > 150:
-        #         print("Give moar speed")
-        #     elif (width / 2) - center[0] > 250:
-        #         print("Give much more speed")
-        # else:
-        #     if (width / 2) - center[0] < 5:
-        #         print("need more speed right")
-        #     elif (width / 2) - center[0] < 75:
-        #         print("Give more speed right")
-        #     elif (width / 2) - center[0] < 150:
-        #         print("Give moar speed right")
-        #     elif (width / 2) - center[0] < 250:
-        #         print("Give much more speed right")# print((width / 2) - center[0])
-
-        # if center[1] > height / 2:  # check if object is at the center of x axis
-        #     print((height / 2) - center[1])
-
         # only proceed if the radius meets a minimum size
         if radius > 1:
             # draw the circle and centroid on the frame,
@@ -104,17 +81,16 @@ while True:
         if pts[i - 1] is None or pts[i] is None:
             continue
 
-
         # check to see if enough points have been accumulated in
         # the buffer
-        try:
+        try:  # escape index errors when there are not enough frames in the queue
             if counter >= 10 and i == 1 and pts[-10] is not None:
                 # compute the difference between the x and y
                 # coordinates and re-initialize the direction
                 # text variables
                 # dX = (pts[-10][0] - pts[i][0])
                 # dY = (pts[-10][1] - pts[i][1])
-                try:
+                try:  # escape type error when there is no conture and the center is of type None
                     (dX, dY) = center
                 except TypeError:
                     pass
@@ -158,6 +134,7 @@ while True:
 
     # show the frame to our screen and increment the frame counter
     cv2.imshow("Frame", frame)
+    cv2.write()
     key = cv2.waitKey(1) & 0xFF
     counter += 1
 
